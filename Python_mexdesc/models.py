@@ -23,13 +23,17 @@ class Account(db.Model, UserMixin):
 #class SettingsView(ModelView):
 	#form_columns = ['email', 'isAdmin']
 	
-#class AccountSettings(ModelView):
-		#list_template = 'users_list.html'
+class AccountSettings(ModelView):
+		column_exclude_list = ['pswd' ]
+		form_columns = ['email', 'isAdmin']
 	
 class LoginForm(FlaskForm):
 	email = StringField('email', validators=[InputRequired(), Length(min=4, max=40)])
 	password = PasswordField('password', validators=[InputRequired(), Length(min=2, max=20)])
 	remember = BooleanField('remember me')
-	
-admin.add_view(ModelView(Account, db.session))
+
+#Faire trois types de vues un pour la gestion des utilisateurs
+admin.add_view(AccountSettings(Account, db.session))
+#Pour les paramètres
+#Pour la gestion des traductions
 #admin.add_view(AccountSettings(Account, db.session))

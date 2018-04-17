@@ -63,14 +63,15 @@ def add_words_from_PDF():
 @app.route("/users")
 @login_required
 def users_list():
-	return render_template('users.twig')
+	 return redirect(url_for('account.index_view'))
+	 #return render_template('users.twig')
 
 @app.route("/edit_user")
 @login_required
 def edit_user():
 	return render_template('edit_user.twig')
 
-@app.route("/add_user")
+@app.route("/admin/account/add_user")
 @login_required
 def add_user():
 	return render_template('add_user.twig')
@@ -89,3 +90,4 @@ def settings():
 def logout():
 	logout_user()
 	return redirect(url_for('login'))
+
