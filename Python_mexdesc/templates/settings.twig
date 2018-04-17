@@ -1,0 +1,19 @@
+{% extends 'menu.twig' %}
+{% block content %}
+<div class="card card-login mx-auto mt-5">
+      <div class="card-header">Change my settings</div>
+      <div class="card-body">
+        <form>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input class="form-control" id="exampleInputEmail1" type="email" aria-describedby="emailHelp" value="Mettre la valeur existante" />
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input class="form-control" id="exampleInputPassword1" type="password" placeholder="New password">
+          </div>
+          <a class="btn btn-primary btn-block" href="/connexion">Save</a>
+        </form>
+      </div>
+</div>
+{% endblock %}

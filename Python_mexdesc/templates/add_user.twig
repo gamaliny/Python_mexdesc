@@ -1,0 +1,24 @@
+{% extends 'menu.twig' %}
+{% block content %}
+<div class="card card-login mx-auto mt-5">
+      <div class="card-header">Add a new user</div>
+      <div class="card-body">
+        <form>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input class="form-control" id="exampleInputEmail1" type="email" aria-describedby="emailHelp" />
+          </div>
+		  <div class="custom-control custom-radio">
+			  <input type="radio" checked="checked" id="customRadio1" name="customRadio" class="custom-control-input">
+			  <label class="custom-control-label" for="customRadio1">Admin</label>
+		  </div>
+		  <div class="custom-control custom-radio">
+			  <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
+			  <label class="custom-control-label" for="customRadio2">Translator</label>
+		  </div>
+		  <br>
+          <a class="btn btn-primary btn-block" href="/connexion">Send a generated password to the email</a>
+        </form>
+      </div>
+</div>
+{% endblock %}
