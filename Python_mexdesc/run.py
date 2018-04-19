@@ -7,7 +7,7 @@ from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
 #gestion des utilisateurs
 from flask_admin import Admin
-
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
 
@@ -18,6 +18,7 @@ db = SQLAlchemy(app)
 admin = Admin(app, 'Example : Layout', base_template='users.twig')
 login = LoginManager(app)
 login.init_app(app)
+mail = Mail(app)
 
 from views import *	
 

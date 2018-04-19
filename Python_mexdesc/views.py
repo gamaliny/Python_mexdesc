@@ -1,15 +1,22 @@
+import string
+import random
 from run import app
 from run import login
+from run import db
+from run import mail
 from models import Account
 from models import LoginForm
+from models import NewUserForm
 #Pour utiliser Flask, rediriger vers une autre route et afficher un template
 from flask import Flask, url_for, redirect, render_template
 #Pour les champs du formulaire de connexion, login, pswd et se souvenir du mot de passe
 from flask_sqlalchemy import SQLAlchemy
 #Pour comparer le mot de passe crypté dans la BDD et convertir en version crypté celui entré
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 #gestion des paramètres de l'utilisateur connecté
 from flask_login import login_user, logout_user, login_required, current_user
+
+from flask_mail import Message
 
 @login.user_loader
 def load_user(user_id): 
@@ -71,10 +78,21 @@ def users_list():
 def edit_user():
 	return render_template('edit_user.twig')
 
-@app.route("/admin/account/add_user")
+@app.route("/admin/account/add_user", methods=['GET', 'POST'])
 @login_required
 def add_user():
-	return render_template('add_user.twig')
+	form = NewUserForm()
+	if form.validate_on_submit():
+		password = password_generator()
+		hash_password = generate_password_hash(password)
+		new_user = Account(email=form.email.data, pswd=hash_password, isAdmin=form.isAdmin.data)
+		db.session.add(new_user)
+		db.session.commit()
+		msg = Message('Account details for Maya translator website', sender = 'gamaliny@gmail.com', body='Your login is your email adress and your password is '+password, recipients = [form.email.data])
+		mail.send(msg)
+		return 'New user has been created, the password was sended to his/her email '
+		#Mettre en popup
+	return render_template('add_user.twig', form= form)
 
 @app.route("/scan_OCR")
 def scan_OCR():
@@ -91,3 +109,5 @@ def logout():
 	logout_user()
 	return redirect(url_for('login'))
 
+def password_generator(size=6, chars=string.ascii_uppercase + string.digits):
+	return ''.join(random.choice(chars) for _ in range(size))

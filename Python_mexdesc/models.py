@@ -24,13 +24,17 @@ class Account(db.Model, UserMixin):
 	#form_columns = ['email', 'isAdmin']
 	
 class AccountSettings(ModelView):
-		column_exclude_list = ['pswd' ]
-		form_columns = ['email', 'isAdmin']
+	column_exclude_list = ['pswd' ]
+	form_columns = ['email', 'isAdmin']
 	
 class LoginForm(FlaskForm):
-	email = StringField('email', validators=[InputRequired(), Length(min=4, max=40)])
+	email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
 	password = PasswordField('password', validators=[InputRequired(), Length(min=2, max=20)])
 	remember = BooleanField('remember me')
+	
+class NewUserForm(FlaskForm):
+	email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
+	isAdmin = BooleanField('Administrator')
 
 #Faire trois types de vues un pour la gestion des utilisateurs
 admin.add_view(AccountSettings(Account, db.session))
