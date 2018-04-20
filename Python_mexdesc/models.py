@@ -24,8 +24,14 @@ class Account(db.Model, UserMixin):
 	#form_columns = ['email', 'isAdmin']
 	
 class AccountSettings(ModelView):
+	edit_template = 'edit_user.twig'
 	column_exclude_list = ['pswd' ]
 	form_columns = ['email', 'isAdmin']
+	
+class OwnAccountSettings(ModelView):
+	edit_template = 'settings.twig'
+	column_exclude_list = ['pswd', 'isAdmin']
+	form_columns = ['email']
 	
 class LoginForm(FlaskForm):
 	email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])

@@ -15,7 +15,7 @@ app.config.from_pyfile('config.py')
 
 Bootstrap(app)
 db = SQLAlchemy(app)
-admin = Admin(app, 'Example : Layout', base_template='users.twig')
+admin = Admin(app, 'Gestion des utilisateurs', base_template='users.twig')
 login = LoginManager(app)
 login.init_app(app)
 mail = Mail(app)

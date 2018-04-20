@@ -66,18 +66,17 @@ def import_words_PDF():
 @login_required
 def add_words_from_PDF():
 	return render_template('add_words_from_PDF.twig')
-	
-@app.route("/users")
-@login_required
-def users_list():
-	 return redirect(url_for('account.index_view'))
-	 #return render_template('users.twig')
 
-@app.route("/edit_user")
+@app.route("/admin/account/edit/", methods=['GET', 'POST'])
 @login_required
 def edit_user():
-	return render_template('edit_user.twig')
-
+	item = Item.query.get(id)
+	user = Account.query.get(item)  
+	form = AccountForm(obj=user) 
+	if form.validate_on_submit():
+		return redirect('/admin/account')
+	return redirect(url_for('/admin/account/edit/'))
+	
 @app.route("/admin/account/add_user", methods=['GET', 'POST'])
 @login_required
 def add_user():
@@ -88,9 +87,9 @@ def add_user():
 		new_user = Account(email=form.email.data, pswd=hash_password, isAdmin=form.isAdmin.data)
 		db.session.add(new_user)
 		db.session.commit()
-		msg = Message('Account details for Maya translator website', sender = 'gamaliny@gmail.com', body='Your login is your email adress and your password is '+password, recipients = [form.email.data])
+		msg = Message('Account details for Maya translator website', sender = 'gamaliny@gmail.com', body='Your login is :'+ form.email.data +' adress and your password is '+password, recipients = [form.email.data])
 		mail.send(msg)
-		return 'New user has been created, the password was sended to his/her email '
+		return 'New user has been created, the password has been send to his/her email '
 		#Mettre en popup
 	return render_template('add_user.twig', form= form)
 
@@ -101,6 +100,7 @@ def scan_OCR():
 @app.route("/settings")
 @login_required
 def settings():
+	#return redirect("/admin/account/edit/?id="+current_user.get_id())
 	return render_template('settings.twig')
 	
 @app.route('/logout')
