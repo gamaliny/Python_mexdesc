@@ -28,10 +28,9 @@ class AccountSettings(ModelView):
 	column_exclude_list = ['pswd' ]
 	form_columns = ['email', 'isAdmin']
 	
-class OwnAccountSettings(ModelView):
-	edit_template = 'settings.twig'
-	column_exclude_list = ['pswd', 'isAdmin']
-	form_columns = ['email']
+class SettingsForm(FlaskForm):
+	email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
+	pswd = PasswordField('password', validators=[InputRequired(), Length(min=2, max=20)])
 	
 class LoginForm(FlaskForm):
 	email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])

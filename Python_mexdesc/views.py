@@ -7,6 +7,7 @@ from run import mail
 from models import Account
 from models import LoginForm
 from models import NewUserForm
+from models import SettingsForm
 #Pour utiliser Flask, rediriger vers une autre route et afficher un template
 from flask import Flask, url_for, redirect, render_template
 #Pour les champs du formulaire de connexion, login, pswd et se souvenir du mot de passe
@@ -70,7 +71,7 @@ def add_words_from_PDF():
 @app.route("/admin/account/edit/", methods=['GET', 'POST'])
 @login_required
 def edit_user():
-	item = Item.query.get(id)
+	item = Account.query.get(id)
 	user = Account.query.get(item)  
 	form = AccountForm(obj=user) 
 	if form.validate_on_submit():
@@ -91,17 +92,25 @@ def add_user():
 		mail.send(msg)
 		return 'New user has been created, the password has been send to his/her email '
 		#Mettre en popup
-	return render_template('add_user.twig', form= form)
+	return render_template('add_user.twig', form = form)
 
 @app.route("/scan_OCR")
 def scan_OCR():
 	return render_template('upload_PDF.twig')	
 
-@app.route("/settings")
+@app.route("/settings", methods=['GET', 'POST'])
 @login_required
 def settings():
-	#return redirect("/admin/account/edit/?id="+current_user.get_id())
-	return render_template('settings.twig')
+	item = Account.query.get(current_user.get_id())
+	user = Account.query.get(item)
+	form = SettingsForm(obj = item)
+	if form.validate_on_submit():
+		user_updated = Account.query.get(current_user.get_id())
+		user_updated.email = form.email.data
+		user_updated.pswd = generate_password_hash(form.pswd.data)
+		db.session.commit()
+		return redirect(url_for('account.edit_view'))
+	return render_template('settings.twig', form = form)
 	
 @app.route('/logout')
 @login_required
