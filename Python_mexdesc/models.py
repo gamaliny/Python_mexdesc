@@ -24,6 +24,7 @@ class Account(db.Model, UserMixin):
 	#form_columns = ['email', 'isAdmin']
 	
 class AccountSettings(ModelView):
+	list_template = 'admin/list.html'
 	edit_template = 'edit_user.twig'
 	column_exclude_list = ['pswd' ]
 	form_columns = ['email', 'isAdmin']
