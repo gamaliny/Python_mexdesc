@@ -7,7 +7,7 @@ from wtforms import StringField, PasswordField, BooleanField
 #Pour le formulaire de connexion
 from flask_wtf import FlaskForm
 #Pour obliger de remplir les champs ayant une certaine taille de value
-from wtforms.validators import InputRequired, Email, Length
+from wtforms.validators import InputRequired, Email, Length, Optional
 #Pour connecter à la BDD
 from flask_login import UserMixin
 #Pour gérer les utilisateurs
@@ -30,7 +30,7 @@ class AccountSettings(ModelView):
 	
 class SettingsForm(FlaskForm):
 	email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
-	pswd = PasswordField('password', validators=[InputRequired(), Length(min=2, max=20)])
+	pswd = PasswordField('password', validators=[Optional(), Length(min=2, max=20)])
 	
 class LoginForm(FlaskForm):
 	email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
@@ -40,6 +40,9 @@ class LoginForm(FlaskForm):
 class NewUserForm(FlaskForm):
 	email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
 	isAdmin = BooleanField('Administrator')
+
+class ResetPasswordForm(FlaskForm):
+	email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
 
 #Faire trois types de vues un pour la gestion des utilisateurs
 admin.add_view(AccountSettings(Account, db.session))

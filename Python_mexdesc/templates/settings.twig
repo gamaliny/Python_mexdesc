@@ -1,6 +1,7 @@
 {% extends 'menu.twig' %}
 {% import "bootstrap/wtf.html" as wtf %}
 {% block content %}
+{{current_user.pswd}}
 <div class="card card-login mx-auto mt-5">
       <div class="card-header">Edit form for an user</div>
       <div class="card-body">
