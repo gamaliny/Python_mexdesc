@@ -20,6 +20,11 @@ class Account(db.Model, UserMixin):
 	pswd = db.Column(db.String(60))
 	isAdmin = db.Column(db.Boolean)
 	
+class AccountForm(ModelView):
+	email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
+	isAdmin = BooleanField('Administrator')
+	new_password = BooleanField('Send a new password')
+	
 #class SettingsView(ModelView):
 	#form_columns = ['email', 'isAdmin']
 	

@@ -78,20 +78,6 @@ def import_words_PDF():
 @login_required
 def add_words_from_PDF():
 	return render_template('add_words_from_PDF.twig')
-
-@app.route("/admin/account/edit/", methods=['GET', 'POST'])
-@login_required
-def edit_user():
-	item = Account.query.get(id)
-	user = Account.query.get(item) 	
-	form = AccountForm(obj=user) 
-	if form.validate_on_submit():
-		if form.newpassword.data == True:
-			user_updated = Account.query.get(request.args.get('id'))
-			send_details_account(form, 'forget_update')
-			return "send"
-		return redirect('/admin/account')
-	return redirect(url_for('/admin/account/edit/'))
 	
 @app.route("/admin/account/add_user", methods=['GET', 'POST'])
 @login_required
@@ -145,4 +131,3 @@ def send_details_account(form, type):
 	db.session.commit()
 	msg = Message(subject, sender = 'gamaliny@gmail.com', body='Your login is :'+ form.email.data +' and your password is '+password, recipients = [form.email.data])
 	mail.send(msg)
-		
