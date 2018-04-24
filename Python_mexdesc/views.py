@@ -9,8 +9,9 @@ from models import LoginForm
 from models import ResetPasswordForm
 from models import NewUserForm
 from models import SettingsForm
+from functools import wraps
 #Pour utiliser Flask, rediriger vers une autre route et afficher un template
-from flask import Flask, url_for, redirect, render_template
+from flask import Flask, url_for, redirect, render_template, request, abort
 #Pour les champs du formulaire de connexion, login, pswd et se souvenir du mot de passe
 from flask_sqlalchemy import SQLAlchemy
 #Pour comparer le mot de passe crypté dans la BDD et convertir en version crypté celui entré
@@ -19,6 +20,13 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
 
 from flask_mail import Message
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if Account.query.get(current_user.get_id()).isAdmin is False:
+            return abort(403)
+    return decorated_function
 
 @login.user_loader
 def load_user(user_id): 
@@ -81,6 +89,7 @@ def add_words_from_PDF():
 	
 @app.route("/admin/account/add_user", methods=['GET', 'POST'])
 @login_required
+@admin_required
 def add_user():
 	form = NewUserForm()
 	if form.validate_on_submit():

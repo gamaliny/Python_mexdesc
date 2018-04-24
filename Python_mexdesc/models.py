@@ -12,7 +12,7 @@ from wtforms.validators import InputRequired, Email, Length, Optional
 from flask_login import UserMixin
 #Pour gérer les utilisateurs
 from flask_admin.contrib.sqla import ModelView
-
+from flask_login import current_user
 
 class Account(db.Model, UserMixin):
 	id = db.Column(db.Integer, primary_key=True)
@@ -25,14 +25,20 @@ class AccountForm(ModelView):
 	isAdmin = BooleanField('Administrator')
 	new_password = BooleanField('Send a new password')
 	
-#class SettingsView(ModelView):
-	#form_columns = ['email', 'isAdmin']
+
 	
 class AccountSettings(ModelView):
 	list_template = 'admin/list.html'
 	edit_template = 'edit_user.twig'
 	column_exclude_list = ['pswd' ]
 	form_columns = ['email', 'isAdmin']
+	
+	def is_accessible(self):
+		if not current_user.is_active or not current_user.is_authenticated:
+			return False
+		if Account.query.get(current_user.get_id()).isAdmin is True:
+			return True
+		return False
 	
 class SettingsForm(FlaskForm):
 	email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
