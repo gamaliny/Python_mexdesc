@@ -1,0 +1,2 @@
+Descartes Mexique est une application permettant de traduire automatiquement à partir d'un fichier PDF scanné par OCR de langues indigènes (tel que le Maya) en Espagnol afin de permettre une meilleure gestion de l'administration au Mexique.
+Voici la partie gestion des utilisateurs.
